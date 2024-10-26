@@ -1,8 +1,6 @@
-![iPhone 15 Pro Max](https://github.com/user-attachments/assets/25ceaca1-c862-4002-bafa-3b18cd7f419c)
-
-
-
 # FlightRecorder
+
+![iPhone 15 Pro Max](https://github.com/user-attachments/assets/25ceaca1-c862-4002-bafa-3b18cd7f419c)
 
 Dump IPAs off a jailbroken iOS device automatically.
 
@@ -11,7 +9,7 @@ Dump IPAs off a jailbroken iOS device automatically.
 ### On idevice
 
 1. Jailbreak the device
-2. Using your favorite package manager, add and install Frida using the Frida repo <https://build.frida.re> ([Install docs](https://frida.re/docs/ios/))
+2. Using your favorite package manager, adPd and install Frida using the Frida repo <https://build.frida.re> ([Install docs](https://frida.re/docs/ios/))
 3. on the device, install the following:
     - `open`
     - `plutil`
@@ -26,8 +24,7 @@ Dump IPAs off a jailbroken iOS device automatically.
 1. Clone this repo
 2. Copy `.env.example` to `.env`
 3. Fill out `.env`
-    - `ideviceIP`: IP of the idevice to SSH into and use Frida from
-    - `ideviceUser`: User for SSH (This is generally `mobile`)
+    - `ideviceSSH`: `user@host` format (Default user for iOS is generally `mobile`)
     - `idevicePort`: SSH port for the idevice (This is generally `2222` or `22`)
     - `FridaPort`: The port for the Frida server (`frida-server` runs on `27042` by default)
     - `IPAServer`: The web directory where you host IPAs (Should return `200` if the IPA exists, `404` otherwise)
