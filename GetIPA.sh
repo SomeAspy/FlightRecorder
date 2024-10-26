@@ -5,8 +5,8 @@ function getEnv() {
 }
 
 ideviceIP=$(getEnv ideviceIP);
-idevicePort=$(getEnv idevicePort);
-SSH=$(getEnv ideviceSSH);
+idevicePort=$(getEnv idevicePort)
+SSH=$(getEnv ideviceUser)@${ideviceIP};
 
 AppName=$(getEnv AppName)
 AppIdentifier=$(getEnv AppIdentifier)
