@@ -42,11 +42,11 @@ ssh -q "$SSH" -p "${idevicePort}" -t "launchctl list | grep discord | cut -f 1 |
 echo "Renaming IPA file to ${FullIPAFile}"
 mv  "${AppIdentifier}"*.ipa "${FullIPAFile}"
 
-mv "${FullIPAFile}" "$(getEnv UploadDirectory)"
+mv "${FullIPAFile}" "$(getEnv UploadDirectory)" || exit 44
 
 # OPTIONAL SEND TO DISCORD #
 
-if [ "$(getEnv IPAServer)" == "true" ]
+if [ "$(getEnv DiscordWebhook)" == "true" ]
     then
         curl -H "Content-Type: application/json" -d "{\"username\": \"$(getEnv WebhookUsername)\", \"content\":\"${AppName} v${version} (${build}) - ${IPAServer}/${FullIPAFile}\"}" "$(getEnv DiscordWebhook)"
 fi
