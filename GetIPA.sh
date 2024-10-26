@@ -6,10 +6,12 @@ function getEnv() {
 
 ideviceIP=$(getEnv ideviceIP);
 idevicePort=$(getEnv idevicePort)
-SSH=$(getEnv ideviceUser)@${ideviceIP};
+SSH=$(getEnv ideviceSSH);
 
 AppName=$(getEnv AppName)
 AppIdentifier=$(getEnv AppIdentifier)
+
+IPAServer=$(getEnv IPAServer)
 
 echo "Logging into ${SSH}:${idevicePort}..."
 
@@ -18,7 +20,7 @@ version=$(ssh -q "$SSH" -p "${idevicePort}" -t "plutil -key CFBundleShortVersion
 
 FullIPAFile="${AppName}"_"${version}"_"${build}".ipa
 
-IPAHostStatus=$(curl -Is "$(getEnv IPAServer)"/"${FullIPAFile}" | awk '/^HTTP/{print $2}');
+IPAHostStatus=$(curl -Is "${IPAServer}"/"${FullIPAFile}" | awk '/^HTTP/{print $2}');
 
 if [ "$IPAHostStatus" == "200" ]
     then
@@ -35,9 +37,16 @@ source frida-ios-dump/.venv/bin/activate
 python frida-ios-dump/decrypter.py -H "${ideviceIP}":"$(getEnv FridaPort)" -N "${AppIdentifier}"
 
 # Close the app so it can update in the background
-kill "$(launchctl list | grep "${AppIdentifier}" | awk '{print $1}')"
+ssh -q "$SSH" -p "${idevicePort}" -t "launchctl list | grep discord | cut -f 1 | xargs -I{} kill {}"
 
 echo "Renaming IPA file to ${FullIPAFile}"
 mv  "${AppIdentifier}"*.ipa "${FullIPAFile}"
 
 mv "${FullIPAFile}" "$(getEnv UploadDirectory)"
+
+# OPTIONAL SEND TO DISCORD #
+
+if [ "$(getEnv IPAServer)" == "true" ]
+    then
+        curl -H "Content-Type: application/json" -d "{\"username\": \"$(getEnv WebhookUsername)\", \"content\":\"${AppName} v${version} (${build}) - ${IPAServer}/${FullIPAFile}\"}" "$(getEnv DiscordWebhook)"
+fi

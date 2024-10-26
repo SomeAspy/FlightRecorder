@@ -24,6 +24,7 @@ Dump IPAs off a jailbroken iOS device automatically.
 1. Clone this repo
 2. Copy `.env.example` to `.env`
 3. Fill out `.env`
+    - `ideviceSSH`: SSH string to connect to the idevice in `user@host` format (You can also use presets from your SSH config)
     - `ideviceIP`: IP of the idevice to SSH into and use Frida from
     - `ideviceUser`: User for SSH (This is generally `mobile`)
     - `idevicePort`: SSH port for the idevice (This is generally `2222` or `22`)
@@ -32,6 +33,9 @@ Dump IPAs off a jailbroken iOS device automatically.
     - `UploadDirectory`: The directory the IPAs are hosted from for `IPAServer`
     - `AppName`: The app's name (The first letter is usually capitalized)
     - `AppIdentifier`: The app's identifier (This usually looks like `TLD.company.app`)
+    - `SendToDiscord` [Optional]: `Boolean` Whether to send a notification to a Discord webhook
+    - `WebhookUsername` [Optional]: The username for the webhook to use
+    - `DiscordWebhook` [Optional]: The URL for the webhook
 4. Run `setup.sh` (You may need to `chmod +x` the file)
     - This script does the following:
     1. Clones required submodules into the repository
