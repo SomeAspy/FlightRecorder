@@ -42,7 +42,7 @@ ssh -q "$SSH" -p "${idevicePort}" -t "launchctl list | grep discord | cut -f 1 |
 echo "Renaming IPA file to ${FullIPAFile}"
 mv  "${AppIdentifier}"*.ipa "${FullIPAFile}"
 
-mv "${FullIPAFile}" "$(getEnv UploadDirectory)" || exit 44
+mv "${FullIPAFile}" "$(getEnv UploadDirectory)" | exit 44
 
 # OPTIONAL SEND TO DISCORD #
 
