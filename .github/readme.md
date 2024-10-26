@@ -33,7 +33,6 @@ Dump IPAs off a jailbroken iOS device automatically.
     - `UploadDirectory`: The directory the IPAs are hosted from for `IPAServer`
     - `AppName`: The app's name (The first letter is usually capitalized)
     - `AppIdentifier`: The app's identifier (This usually looks like `TLD.company.app`)
-    - `WebhookUsername` [Optional]: The username for the webhook to use
     - `DiscordWebhook` [Optional]: The URL for the webhook
 4. Run `setup.sh` (You may need to `chmod +x` the file)
     - This script does the following:
@@ -50,5 +49,4 @@ Dump IPAs off a jailbroken iOS device automatically.
     4. SSHs into the idevice and uses `open` to open the specified app
     5. Runs [`frida-ios-dump`](https://github.com/miticollo/frida-ios-dump)'s [`decrypter.py`](https://github.com/miticollo/frida-ios-dump/blob/master/decrypter.py)
         - This places the IPA file into the current folder
-    6. Rename the IPA file to `{name}_{semver}_{build}.ipa`
-    7. Move the IPA into the web server directory
+    6. Rename the IPA file to `{name}_{semver}_{build}.ipa` and move to the server directory
