@@ -13,8 +13,8 @@ AppIdentifier=$(getEnv AppIdentifier)
 
 echo "Logging into ${SSH}:${idevicePort}..."
 
-build=$(ssh -q "$SSH" -p "${idevicePort}" -t "plutil -key CFBundleVersion /var/containers/Bundle/Application/**/${AppName}.app/Info.plist" | tr -d '\n' | tr -d '\r');
-version=$(ssh -q "$SSH" -p "${idevicePort}" -t "plutil -key CFBundleShortVersionString /var/containers/Bundle/Application/**/${AppName}.app/Info.plist" | tr -d '\n' | tr -d '\r');
+build=$(ssh -q "$SSH" -p "${idevicePort}" -t "plutil -key CFBundleVersion /var/containers/Bundle/Application/**/${AppName}.app/Info.plist" | tr -d '\n' | tr -d '\r') || exit 22;
+version=$(ssh -q "$SSH" -p "${idevicePort}" -t "plutil -key CFBundleShortVersionString /var/containers/Bundle/Application/**/${AppName}.app/Info.plist" | tr -d '\n' | tr -d '\r') || exit 22;
 
 FullIPAFile="${AppName}"_"${version}"_"${build}".ipa
 
@@ -33,6 +33,9 @@ ssh -q "$SSH" -p "${idevicePort}" -t "open ${AppIdentifier}"
 source frida-ios-dump/.venv/bin/activate
 
 python frida-ios-dump/decrypter.py -H "${ideviceIP}":"$(getEnv FridaPort)" -N "${AppIdentifier}"
+
+# Close the app so it can update in the background
+kill "$(launchctl list | grep "${AppIdentifier}" | awk '{print $1}')"
 
 echo "Renaming IPA file to ${FullIPAFile}"
 mv  "${AppIdentifier}"*.ipa "${FullIPAFile}"
