@@ -8,11 +8,10 @@ executeSSH() {
     ssh -q "$(getEnv ideviceSSH)" -p "$(getEnv idevicePort)" -t "$1" || { echo "SSH Failure"; exit 22; }
 }
 
+# Get environment variables
 ideviceIP=$(getEnv ideviceIP);
-
 AppName=$(getEnv AppName);
 AppIdentifier=$(getEnv AppIdentifier);
-
 IPAServer=$(getEnv IPAServer);
 
 build=$(executeSSH "plutil -key CFBundleVersion /var/containers/Bundle/Application/**/${AppName}.app/Info.plist" | tr -d '\n' | tr -d '\r');
@@ -40,8 +39,13 @@ python frida-ios-dump/decrypter.py -H "${ideviceIP}":"$(getEnv FridaPort)" -N "$
 executeSSH "launchctl list | grep discord | cut -f 1 | xargs -I{} kill {}"
 
 echo "Moving IPA file to server directory as ${FullIPAFile}"
-mv  "${AppIdentifier}"*.ipa "$(getEnv UploadDirectory)"/"${FullIPAFile}" || { echo "Could not move downloaded IPA"; exit 44; };
+SHA256=$(sha256sum "${AppIdentifier}"*.ipa | awk '{ print $1 }')
+mv "${AppIdentifier}"*.ipa "$(getEnv UploadDirectory)"/"${FullIPAFile}" || { echo "Could not move downloaded IPA"; exit 44; };
 
 # OPTIONAL SEND TO DISCORD #
 
-curl -H "Content-Type: application/json" -d "{\"content\":\"${AppName} v${version} (${build}) - ${IPAServer}/${FullIPAFile}\"}" "$(getEnv DiscordWebhook)" || { echo "Failed to send webhook!"; }
+curl \
+-H "Content-Type: application/json" \
+-d "{\"content\":\"Discord ${version} (${build})\n${IPAServer}/${FullIPAFile}\nSHA256 ${SHA256}\"}" \
+"$(getEnv DiscordWebhook)" \
+|| { echo "Failed to send webhook!"; }
