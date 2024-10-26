@@ -33,7 +33,6 @@ Dump IPAs off a jailbroken iOS device automatically.
     - `UploadDirectory`: The directory the IPAs are hosted from for `IPAServer`
     - `AppName`: The app's name (The first letter is usually capitalized)
     - `AppIdentifier`: The app's identifier (This usually looks like `TLD.company.app`)
-    - `SendToDiscord` [Optional]: `Boolean` Whether to send a notification to a Discord webhook
     - `WebhookUsername` [Optional]: The username for the webhook to use
     - `DiscordWebhook` [Optional]: The URL for the webhook
 4. Run `setup.sh` (You may need to `chmod +x` the file)

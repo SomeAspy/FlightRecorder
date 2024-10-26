@@ -46,7 +46,4 @@ mv "${FullIPAFile}" "$(getEnv UploadDirectory)" | exit 44
 
 # OPTIONAL SEND TO DISCORD #
 
-if [ "$(getEnv DiscordWebhook)" == "true" ]
-    then
-        curl -H "Content-Type: application/json" -d "{\"username\": \"$(getEnv WebhookUsername)\", \"content\":\"${AppName} v${version} (${build}) - ${IPAServer}/${FullIPAFile}\"}" "$(getEnv DiscordWebhook)"
-fi
+curl -H "Content-Type: application/json" -d "{\"username\": \"$(getEnv WebhookUsername)\", \"content\":\"${AppName} v${version} (${build}) - ${IPAServer}/${FullIPAFile}\"}" "$(getEnv DiscordWebhook)" | exit 0
